@@ -15,44 +15,43 @@
 
 ## Установка
 
-После публикации репозитория скачайте его:
-
-```bash
-git clone https://github.com/Tsuev/opendeploy-plugin.git
-```
-
-Далее используйте абсолютный путь к скачанной папке `opendeploy-plugin`.
-
 ### Codex / ChatGPT desktop
 
-Добавьте локальный каталог плагинов:
+Добавьте маркетплейс прямо из GitHub:
 
 ```bash
-codex plugin marketplace add /абсолютный/путь/к/opendeploy-plugin
+codex plugin marketplace add https://github.com/Tsuev/opendeploy-plugin.git
 ```
 
-Перезапустите приложение и установите **OpenDeploy** из источника `opendeploy-marketplace`. Для работы с файлами откройте локальный проект сайта. [Как устроены локальные каталоги Codex](https://developers.openai.com/plugins/build/plugins).
+В приложении установите **OpenDeploy** из источника `opendeploy-marketplace`, затем начните новый чат с папкой сайта. В форме добавления маркетплейса укажите этот же URL в поле «Источник», `main` в поле «Git ref», а «Выборочные пути» оставьте пустым. [Документация Codex](https://developers.openai.com/plugins/build/plugins).
 
 ### Claude Code
-
-Для одной сессии запустите:
-
-```bash
-claude --plugin-dir /абсолютный/путь/к/opendeploy-plugin
-```
 
 Для постоянной установки выполните в терминале:
 
 ```bash
-claude plugin marketplace add /абсолютный/путь/к/opendeploy-plugin
+claude plugin marketplace add https://github.com/Tsuev/opendeploy-plugin.git
 claude plugin install opendeploy@opendeploy-marketplace
+```
+
+Для одной сессии можно скачать репозиторий и подключить локальную папку:
+
+```bash
+git clone https://github.com/Tsuev/opendeploy-plugin.git
+claude --plugin-dir /абсолютный/путь/к/opendeploy-plugin
 ```
 
 [Документация Claude Code по каталогам плагинов](https://code.claude.com/docs/en/plugins/create-marketplace).
 
 ### OpenCode
 
-OpenCode подключает скилл из репозитория, без установки нативного плагина. Добавьте в `opencode.json` проекта сайта:
+OpenCode подключает скилл из локальной копии репозитория, без установки нативного плагина. Сначала скачайте его:
+
+```bash
+git clone https://github.com/Tsuev/opendeploy-plugin.git
+```
+
+Затем добавьте в `opencode.json` проекта сайта:
 
 ```json
 {
