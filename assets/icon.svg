@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-labelledby="title">
+  <title id="title">OpenDeploy</title>
+  <rect width="256" height="256" rx="56" fill="#123B48"/>
+  <path d="M55 164h146" stroke="#76D9BE" stroke-width="14" stroke-linecap="round"/>
+  <path d="M128 164V71m0 0-37 37m37-37 37 37" fill="none" stroke="#76D9BE" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M72 193h112" stroke="#B8D0DB" stroke-width="10" stroke-linecap="round" opacity=".8"/>
+</svg>

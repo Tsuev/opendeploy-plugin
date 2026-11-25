@@ -92,3 +92,14 @@ OpenCode подключает скилл из репозитория, без у�
 - `plugin.json`, `.claude-plugin/` и `.agents/plugins/` — описание плагина для совместимых сред.
 
 Клиент работает с API `https://app.opendeploy.ru`. Для локальной разработки можно задать `OPENDEPLOY_API=http://127.0.0.1:3100`. Токен хранится локально в `~/.opendeploy/`.
+
+## Пакет для OpenAI Platform
+
+Для загрузки в OpenAI Platform соберите ZIP из корня репозитория:
+
+```bash
+npm ci --ignore-scripts --prefix client
+python3 scripts/build-submission-zip.py
+```
+
+Готовый файл находится в `dist/`. Он содержит навык, локальный клиент и его зависимости, но не содержит `.git`, локальные настройки или учётные данные. При создании плагина на Platform выберите **Skills only**. Плагин помечен как **Desktop only**, поскольку для публикации сайта он запускает локальный клиент.
