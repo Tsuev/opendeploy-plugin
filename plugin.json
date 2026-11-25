@@ -23,8 +23,9 @@
           "Prepare my static website for publication with OpenDeploy.",
           "Check my website build and SEO before publishing."
         ],
-        "logo": "./assets/icon.svg",
-        "composerIcon": "./assets/icon.svg"
+        "brandColor": "#000000",
+        "logo": "./assets/logo.png",
+        "composerIcon": "./assets/logo.png"
       }
     }
   }

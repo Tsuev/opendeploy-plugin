@@ -11,7 +11,9 @@ OUTPUT = ROOT / "dist" / f"opendeploy-{VERSION}.zip"
 FILES = [
     "plugin.json",
     "README.md",
-    "assets/icon.svg",
+    "assets/logo.png",
+    "docs/images/overview.svg",
+    "docs/images/workflow.svg",
     "skills/opendeploy/SKILL.md",
     "skills/opendeploy/references/agent-client.md",
     "client/bin/opendeploy.mjs",
