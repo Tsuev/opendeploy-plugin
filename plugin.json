@@ -1,0 +1,12 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "opendeploy",
+  "version": "0.1.0",
+  "description": "Prepare and publish static websites with OpenDeploy.",
+  "repository": "https://github.com/Tsuev/opendeploy-plugin",
+  "extensions": {
+    "com.openai": {
+      "requires_local_executor": true
+    }
+  }
+}

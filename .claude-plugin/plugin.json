@@ -1,0 +1,6 @@
+{
+  "name": "opendeploy",
+  "version": "0.1.0",
+  "description": "Prepare and publish static websites with OpenDeploy.",
+  "author": { "name": "OpenDeploy" }
+}

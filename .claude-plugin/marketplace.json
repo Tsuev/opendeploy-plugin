@@ -1,0 +1,12 @@
+{
+  "name": "opendeploy-marketplace",
+  "description": "Публикация статических сайтов через OpenDeploy",
+  "owner": { "name": "OpenDeploy" },
+  "plugins": [
+    {
+      "name": "opendeploy",
+      "source": "./",
+      "description": "Проверка, сборка и публикация статического сайта"
+    }
+  ]
+}

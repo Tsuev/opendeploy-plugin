@@ -1,0 +1,9 @@
+{
+  "name": "@opendeploy/agent-cli",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22.13.0" },
+  "bin": { "opendeploy-agent": "./bin/opendeploy.mjs" },
+  "dependencies": { "yazl": "^3.3.1" }
+}
