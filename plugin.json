@@ -3,7 +3,9 @@
   "name": "opendeploy",
   "version": "0.1.0",
   "description": "Prepare and publish static websites with OpenDeploy.",
-  "author": { "name": "OpenDeploy" },
+  "author": {
+    "name": "OpenDeploy"
+  },
   "repository": "https://github.com/Tsuev/opendeploy-plugin",
   "extensions": {
     "com.openai": {
@@ -17,11 +19,13 @@
         "capabilities": [
           "Review static website projects and builds",
           "Check basic on-page SEO",
-          "Publish approved static builds through OpenDeploy"
+          "Publish and update approved static builds through OpenDeploy",
+          "List sites in the connected account"
         ],
         "defaultPrompt": [
-          "Prepare my static website for publication with OpenDeploy.",
-          "Check my website build and SEO before publishing."
+          "Опубликуй мой сайт",
+          "Покажи мой список сайтов",
+          "Измени мой опубликованный сайт"
         ],
         "brandColor": "#000000",
         "logo": "./assets/logo.png",

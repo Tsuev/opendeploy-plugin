@@ -11,6 +11,10 @@ const api = (process.env.OPENDEPLOY_API || 'https://app.opendeploy.ru').replace(
 const endpoint = new URL(api);
 if (endpoint.protocol !== 'https:' && !(endpoint.protocol === 'http:' && ['localhost','127.0.0.1'].includes(endpoint.hostname))) throw new Error('Для удалённого API требуется HTTPS.');
 const credential = path.join(homedir(), '.opendeploy', `${createHash('sha256').update(api).digest('hex').slice(0, 16)}.json`);
+const MAX_FILE_BYTES = 10 * 1024 * 1024;
+const MAX_BUILD_BYTES = 25 * 1024 * 1024;
+const MAX_ARCHIVE_BYTES = 10 * 1024 * 1024;
+const MAX_FILES = 500;
 async function call(url, options = {}) {
  const response = await fetch(api + url, { ...options, signal: AbortSignal.timeout(30000) });
  const type = response.headers.get('content-type') || '';
@@ -35,13 +39,13 @@ async function zipDirectory(source, dest) {
    if (/(?:^id_(?:rsa|ed25519)$|\.(?:pem|key|p12|pfx)$)/i.test(item.name)) throw new Error(`Уберите возможный секрет из сборки: ${item.name}`);
    const abs = path.join(dir, item.name), rel = path.posix.join(relative, item.name);
    if (item.isDirectory()) await walk(abs, rel);
-   else if (item.isFile()) { const file = await stat(abs); total += file.size; if (total > 50*1024*1024 || ++count > 1000) throw new Error('Сборка превышает лимит.'); zip.addFile(abs, rel); }
+   else if (item.isFile()) { const file = await stat(abs); if (file.size > MAX_FILE_BYTES) throw new Error(`Файл ${rel} превышает лимит 10 МиБ.`); total += file.size; if (total > MAX_BUILD_BYTES) throw new Error('Сборка превышает лимит 25 МиБ.'); if (++count > MAX_FILES) throw new Error('Сборка содержит больше 500 файлов.'); zip.addFile(abs, rel); }
    else throw new Error('Недопустимый тип файла.');
   }
  }
  await walk(source);
  const done = pipeline(zip.outputStream, createWriteStream(dest, { flags: 'wx', mode: 0o600 })); zip.end(); await done;
- const size = (await stat(dest)).size; if (size > 25*1024*1024) throw new Error('Архив превышает лимит 25 МБ.');
+ const size = (await stat(dest)).size; if (size > MAX_ARCHIVE_BYTES) throw new Error('ZIP-архив превышает лимит 10 МиБ.');
 }
 const [command, ...args] = process.argv.slice(2);
 try {
