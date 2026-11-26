@@ -4,7 +4,8 @@
   "version": "0.1.0",
   "description": "Prepare and publish static websites with OpenDeploy.",
   "author": {
-    "name": "OpenDeploy"
+    "name": "OpenDeploy",
+    "url": "https://opendeploy.ru"
   },
   "repository": "https://github.com/Tsuev/opendeploy-plugin",
   "extensions": {
@@ -29,8 +30,10 @@
         ],
         "brandColor": "#000000",
         "logo": "./assets/logo.png",
-        "composerIcon": "./assets/logo.png"
+        "composerIcon": "./assets/logo.png",
+        "websiteURL": "https://opendeploy.ru"
       }
     }
-  }
+  },
+  "homepage": "https://opendeploy.ru"
 }
