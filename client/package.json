@@ -5,5 +5,6 @@
   "type": "module",
   "engines": { "node": ">=22.13.0" },
   "bin": { "opendeploy-agent": "./bin/opendeploy.mjs" },
+  "scripts": { "test": "node --test test/*.test.mjs" },
   "dependencies": { "yazl": "^3.3.1" }
 }

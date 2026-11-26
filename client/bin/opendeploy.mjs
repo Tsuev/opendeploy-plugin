@@ -6,6 +6,7 @@ import { tmpdir, homedir } from 'node:os';
 import path from 'node:path';
 import yazl from 'yazl';
 import { createHash, randomUUID } from 'node:crypto';
+import { reviewSiteContent } from './content-policy.mjs';
 
 const api = (process.env.OPENDEPLOY_API || 'https://app.opendeploy.ru').replace(/\/$/, '');
 const endpoint = new URL(api);
@@ -50,10 +51,10 @@ async function zipDirectory(source, dest) {
 const [command, ...args] = process.argv.slice(2);
 try {
  if (!command || ['help', '--help', '-h'].includes(command)) {
-  console.log('Команды: login, projects, check <поддомен>, create <название>, deploy <id> <поддомен> <папка сборки>.');
+  console.log('Команды: login, projects, check <поддомен>, create <название>, review <папка сборки>, deploy <id> <поддомен> <папка сборки> --content-reviewed.');
   process.exit(0);
  }
- if (!['login', 'projects', 'check', 'create', 'deploy'].includes(command)) throw new Error(`Неизвестная команда: ${command}. Используйте --help.`);
+ if (!['login', 'projects', 'check', 'create', 'review', 'deploy'].includes(command)) throw new Error(`Неизвестная команда: ${command}. Используйте --help.`);
  if (command === 'login') {
   const data = await call('/v1/auth/device', { method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify({client_name:'OpenDeploy AI Agent'}) });
   console.log(`Откройте ${data.verification_uri} и введите код ${data.user_code}`);
@@ -65,12 +66,23 @@ try {
   }
   throw new Error('Время подключения истекло.');
  }
+ if (command === 'review') {
+  if (args.length !== 1) throw new Error('Используйте review <папка сборки>.');
+  const report = await reviewSiteContent(path.resolve(args[0]));
+  console.log(JSON.stringify({status:'requires_agent_review', ...report, message:'Проверьте смысл всех страниц, изображений, видео и других файлов. При запретном или сомнительном содержимом остановите публикацию.'}, null, 2));
+  process.exit(0);
+ }
+ if (command === 'deploy') {
+  const [id, slug, folder, flag] = args;
+  if (!id || !slug || !folder || flag !== '--content-reviewed' || args.length !== 4) throw new Error('Используйте deploy <id проекта> <поддомен> <папка сборки> --content-reviewed после проверки содержимого агентом.');
+  await reviewSiteContent(path.resolve(folder));
+ }
  const accessToken = await access(), headers = { authorization:`Bearer ${accessToken}` };
  if (command === 'projects') console.log(JSON.stringify(await call('/v1/agent/projects', { headers }), null, 2));
  else if (command === 'check') { if (!args[0]) throw new Error('Укажите желаемый поддомен.'); console.log(JSON.stringify(await call(`/v1/agent/subdomains/check?name=${encodeURIComponent(args[0])}`, { headers }), null, 2)); }
  else if (command === 'create') { if (!args[0]) throw new Error('Укажите название сайта.'); console.log(JSON.stringify(await call('/v1/agent/projects', { method:'POST', headers:{...headers,'content-type':'application/json'}, body:JSON.stringify({name:args.join(' ')}) }), null, 2)); }
  else if (command === 'deploy') {
-  const [id, slug, folder] = args; if (!id || !slug || !folder) throw new Error('Используйте deploy <id проекта> <поддомен> <папка сборки>.');
+  const [id, slug, folder] = args;
   const archive = path.join(tmpdir(), `opendeploy-${randomUUID()}.zip`);
   try {
    await zipDirectory(path.resolve(folder), archive);
@@ -82,5 +94,5 @@ try {
    }
    console.log(JSON.stringify(result,null,2));
   } finally { await unlink(archive).catch(()=>{}); }
- } else throw new Error('Команды: login, projects, check <поддомен>, create <название>, deploy <id> <поддомен> <папка сборки>.');
+ } else throw new Error('Команды: login, projects, check <поддомен>, create <название>, review <папка сборки>, deploy <id> <поддомен> <папка сборки> --content-reviewed.');
 } catch (e) { console.error(e.message); process.exitCode=1; }

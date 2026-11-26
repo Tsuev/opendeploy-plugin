@@ -17,6 +17,7 @@ FILES = [
     "skills/opendeploy/SKILL.md",
     "skills/opendeploy/references/agent-client.md",
     "client/bin/opendeploy.mjs",
+    "client/bin/content-policy.mjs",
     "client/package.json",
     "client/package-lock.json",
 ]
