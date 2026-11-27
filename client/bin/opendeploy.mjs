@@ -19,6 +19,8 @@ const MAX_FILES = 500;
 async function call(url, options = {}) {
  const response = await fetch(api + url, { ...options, signal: AbortSignal.timeout(30000) });
  const type = response.headers.get('content-type') || '';
+ if (response.status === 401 && response.headers.has('www-authenticate')) throw new Error('Сервис запросил браузерные данные доступа. Это не вход по коду OpenDeploy; обратитесь к администратору сервиса.');
+ if (response.status === 401 && options.headers?.authorization) throw new Error('Доступ к аккаунту недействителен. Подключите аккаунт заново командой login.');
  if (!type.includes('application/json')) throw new Error(`Сервис вернул HTTP ${response.status} без JSON. Проверьте адрес API и настройки доступа.`);
  const data = await response.json();
  if (!response.ok && response.status !== 202) throw new Error(data.message || `HTTP ${response.status}`);
